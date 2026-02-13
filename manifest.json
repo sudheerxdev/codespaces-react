@@ -1,12 +1,26 @@
 {
-  "name": "DevDetective",
+  "name": "DevDetective GitHub Portfolio Analyzer",
   "short_name": "DevDetective",
+  "description": "Recruiter-style GitHub portfolio analyzer with weighted scoring, insights, and actionable suggestions.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f6f8ff",
-  "theme_color": "#0079ff",
+  "background_color": "#f3f7ff",
+  "theme_color": "#1f6feb",
   "icons": [
-    { "src": "images/favicon-16x16.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "images/favicon-32x32.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "Images/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "Images/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "Images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
   ]
 }
