@@ -1,89 +1,117 @@
-# DevDetective - GitHub Portfolio Analyzer & Enhancer
+# DevDetective - Vercel Production Build
 
-DevDetective is a production-oriented static web app that evaluates a GitHub profile like a recruiter.
-It fetches GitHub data, computes weighted category scores, highlights strengths and red flags,
-and generates actionable portfolio improvement suggestions.
+DevDetective is a GitHub Portfolio Analyzer & Enhancer optimized for Vercel serverless deployment.
+It provides recruiter-style scoring, risk detection, roadmap generation, and downloadable reports using real GitHub data.
 
-## Features
+## Highlights
 
-- Accepts a GitHub username or profile URL
-- Supports optional GitHub PAT for higher rate limits and GraphQL pinned repositories
-- Fetches public repositories, stars, forks, watchers, README presence, language signals, and recency
-- Estimates activity consistency using `pushed_at` timestamps
-- Fetches authored PR and issue counts via GitHub Search API
-- Computes a weighted `GitHub Portfolio Score (0-100)`
-- Computes `Hireability Score` and `Portfolio Readiness Level`
-- Returns 7 sub-scores: Documentation Quality, Code Activity / Consistency, Project Popularity, Repository Completeness, Language Diversity, Recent Activity, Impact Signals
-- Shows transparent scoring inputs and formula context in UI and report output
-- Generates recruiter-style insights: Strengths, Red Flags, Actionable Suggestions (minimum 5)
-- Adds AI Recruiter Simulation verdict and feedback signals
-- Detects hidden portfolio risks (concentration, conversion, collaboration, momentum)
-- Recommends a career path with confidence score and next-skill targets
-- Generates a personalized multi-week improvement roadmap
-- Includes language, repository-importance, subscore radar, and activity-bucket charts
-- Includes pinned repository panel and ranked repository table
-- Supports light/dark mode persistence
-- Exports a downloadable recruiter-ready Markdown report
-- Supports offline shell caching through service worker
+- Accepts GitHub username, `@username`, or profile URL
+- Uses real GitHub REST/GraphQL data through serverless API
+- Objective portfolio score (`0-100`) + weighted category subscores
+- Recruiter insights: strengths, red flags, hidden risks
+- Hireability score + readiness level
+- Top repository ranking and visual analytics dashboard
+- Personalized improvement roadmap and career-path recommendation
+- Downloadable markdown recruiter report
+- Dark/light mode and responsive SaaS-style UI
 
-## Optional GitHub Token Setup
+## Vercel-Native Architecture
 
-Token is optional, but recommended for better API limits and pinned repositories.
+- Static frontend served via Vercel CDN
+- Serverless API route: `api/analyze.js`
+- Stateless request flow
+- Optional distributed rate limiting using Vercel KV / Upstash REST
+- API response caching + in-function cache + CDN caching headers
+- Request de-duplication for concurrent same-user analysis calls
 
-1. Go to GitHub Settings > Developer settings > Personal access tokens.
-2. Create a token with minimal read access for public data.
-3. Paste it into the app's token input.
+## Project Structure
 
-Token handling:
+```text
+.
+├── api/
+│   ├── analyze.js
+│   └── _lib/
+│       ├── analysis.js
+│       ├── github.js
+│       ├── rate-limit.js
+│       └── utils.js
+├── src/
+│   ├── main.js
+│   ├── config/constants.js
+│   ├── report/markdown.js
+│   ├── ui/charts.js
+│   ├── ui/elements.js
+│   ├── ui/render.js
+│   └── utils/core.js
+├── index.html
+├── style.css
+├── sw.js
+├── manifest.json
+├── vercel.json
+└── .env.example
+```
 
-- Stored in browser localStorage key: `devdetective_token`
-- No backend storage is used in this project
+## Environment Variables
 
-## Run Locally
+Set in Vercel Project Settings -> Environment Variables.
 
-This project is plain HTML/CSS/JS. Serve the repository root with any static server.
+### Required (recommended strongly)
 
-### Option 1: Python
+- `GITHUB_TOKEN`: GitHub token for higher rate limits and GraphQL pinned repos
+
+### Optional (for distributed rate limiting)
+
+- `KV_REST_API_URL`
+- `KV_REST_API_TOKEN`
+
+### Optional tuning
+
+- `RATE_LIMIT_MAX_REQUESTS` (default `30`)
+- `RATE_LIMIT_WINDOW_MS` (default `60000`)
+- `ANALYSIS_CACHE_TTL_MS` (default `300000`)
+- `GITHUB_CACHE_TTL_MS` (default `120000`)
+- `GITHUB_REQUEST_TIMEOUT_MS` (default `10000`)
+
+## Deploy on Vercel
+
+1. Import this repository in Vercel.
+2. Add environment variables above.
+3. Deploy.
+
+Vercel settings:
+
+- Build Command: **(none required)**
+- Output Directory: **(none required)**
+- Framework Preset: **Other**
+
+`vercel.json` already includes function config and production headers.
+
+## Local Run
+
+### Static frontend check
 
 ```bash
 python3 -m http.server 5500
 ```
 
-Open:
+Open `http://localhost:5500`.
 
-```text
-http://localhost:5500
+### Full Vercel-like local run (if Vercel CLI installed)
+
+```bash
+vercel dev
 ```
 
-### Option 2: VS Code Live Server or any static server
+## Reliability & Security
 
-Serve the repository root and open `index.html`.
+- Input sanitization for usernames/URLs
+- API abuse protection with rate limiting
+- 429 responses when limits are exceeded
+- Graceful handling for invalid input, not found, network failures, and GitHub upstream failures
+- No sensitive token exposed to browser
+- Security headers configured via `vercel.json`
 
-## Rate Limits and Reliability
+## Notes
 
-- Handles GitHub API errors with clear user-facing messages
-- Shows rate-limit reset time when available
-- Aborts in-flight requests when a new analysis starts
-- Retries once on transient network failures
-- Caches completed analyses for 10 minutes in `devdetective_cache_{username}`
-
-## Scoring Model Summary
-
-Overall score combines these weighted categories:
-
-- Documentation Quality (18%)
-- Code Activity / Consistency (17%)
-- Project Popularity (15%)
-- Repository Completeness (14%)
-- Language Diversity (10%)
-- Recent Activity (14%)
-- Impact Signals (12%)
-
-Each sub-score is normalized to `0-100`, then combined by weight.
-
-## Known Limitations
-
-- Commit frequency is approximated using repository `pushed_at` (not full commit history traversal)
-- README and language deep checks are limited to top repositories for API efficiency
-- Pinned repo retrieval via GraphQL requires token; fallback ranking is used otherwise
-- Output quality depends on public GitHub metadata completeness
+- Commit consistency is approximated via `pushed_at` metadata.
+- Deep README/language checks are limited to top repos for performance and GitHub quota efficiency.

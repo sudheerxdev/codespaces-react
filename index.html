@@ -8,6 +8,15 @@
         name="description"
         content="DevDetective analyzes GitHub portfolios with recruiter-style scoring, strengths, red flags, and actionable suggestions."
     />
+    <meta property="og:title" content="DevDetective | GitHub Portfolio Analyzer" />
+    <meta property="og:description" content="Recruiter-style GitHub portfolio analysis with objective scoring and actionable improvements." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="Images/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DevDetective | GitHub Portfolio Analyzer" />
+    <meta name="twitter:description" content="Production-grade GitHub portfolio analysis with recruiter insights and improvement roadmap." />
+    <meta name="twitter:image" content="Images/logo.png" />
+    <meta name="robots" content="index, follow" />
     <title>DevDetective | GitHub Portfolio Analyzer</title>
 
     <link rel="icon" type="image/png" href="Images/favicon-32x32.png" />
@@ -18,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css" />
 
     <script>
@@ -41,30 +50,51 @@
                 <p>GitHub Portfolio Analyzer and Recruiter Insight Engine</p>
             </div>
         </div>
+        <div class="topbar-pills">
+            <span class="top-pill">Serverless API</span>
+            <span class="top-pill">Rate-Limited</span>
+            <span class="top-pill">Recruiter Lens</span>
+        </div>
     </header>
+
+    <section class="hero-shell">
+        <article class="hero-copy card">
+            <p class="eyebrow">Hackathon Edition</p>
+            <h2>Turn any GitHub profile into a recruiter-ready portfolio report.</h2>
+            <p class="hero-subtitle">
+                DevDetective reads live GitHub signals and returns objective scoring, hidden risk detection,
+                role-fit insights, and a concrete improvement roadmap.
+            </p>
+            <div class="hero-points">
+                <span class="hero-chip">Real GitHub Data</span>
+                <span class="hero-chip">Transparent Scoring</span>
+                <span class="hero-chip">Downloadable Report</span>
+            </div>
+        </article>
+        <aside class="hero-mascot card">
+            <div class="mascot-wrap">
+                <img src="Images/mascot-detective.svg" alt="DevDetective assistant mascot" class="mascot-art" />
+                <div class="mascot-glow" aria-hidden="true"></div>
+            </div>
+            <p class="mascot-line">“Share a profile. I’ll reveal what recruiters really see.”</p>
+        </aside>
+    </section>
 
     <section class="card controls-card">
         <div class="controls-grid">
             <div class="field">
-                <label for="profileInput">GitHub Username or Profile URL</label>
+                <label for="profileInput">
+                    GitHub Username or Profile URL
+                    <span class="tooltip" data-tooltip="Supports username, @username, or full https://github.com/username URL.">?</span>
+                </label>
                 <input
                     id="profileInput"
                     type="text"
                     placeholder="e.g. torvalds or https://github.com/torvalds"
                     autocomplete="off"
                 />
-            </div>
-
-            <div class="field">
-                <label for="tokenInput">GitHub Personal Access Token (optional)</label>
-                <input
-                    id="tokenInput"
-                    type="password"
-                    placeholder="Improves rate limits and enables pinned repos"
-                    autocomplete="off"
-                />
                 <p class="hint">
-                    Stored only in your browser as <code>devdetective_token</code>. It is only used for GitHub API requests.
+                    Tip: paste a full profile URL and DevDetective extracts the username automatically.
                 </p>
             </div>
 
@@ -81,8 +111,27 @@
             <span class="spinner" aria-hidden="true"></span>
             <span id="loadingText">Analyzing profile...</span>
         </div>
+        <div id="successBanner" class="status status-success hidden" aria-live="polite"></div>
         <div id="errorBanner" class="status status-error hidden" role="alert" aria-live="assertive"></div>
         <div id="rateLimitBanner" class="status status-warn hidden" role="alert" aria-live="polite"></div>
+    </section>
+
+    <section id="skeletonPanel" class="skeleton-panel hidden" aria-hidden="true">
+        <div class="skeleton-card">
+            <div class="skeleton-line skeleton-line-lg"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-grid-mini">
+                <div class="skeleton-pill"></div>
+                <div class="skeleton-pill"></div>
+                <div class="skeleton-pill"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-line skeleton-line-lg"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-line-sm"></div>
+        </div>
     </section>
 
     <main class="layout">
@@ -318,6 +367,6 @@
     </main>
 </div>
 
-<script src="script.js"></script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>

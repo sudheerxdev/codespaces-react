@@ -2,7 +2,7 @@
   "name": "DevDetective GitHub Portfolio Analyzer",
   "short_name": "DevDetective",
   "description": "Recruiter-style GitHub portfolio analyzer with weighted scoring, insights, and actionable suggestions.",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f3f7ff",
   "theme_color": "#1f6feb",

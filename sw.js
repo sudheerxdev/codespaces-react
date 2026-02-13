@@ -1,10 +1,16 @@
-const CACHE_NAME = "devdetective-v3";
+const CACHE_NAME = "devdetective-v5";
 
 const STATIC_ASSETS = [
     "./",
     "./index.html",
     "./style.css",
-    "./script.js",
+    "./src/main.js",
+    "./src/config/constants.js",
+    "./src/ui/elements.js",
+    "./src/ui/render.js",
+    "./src/ui/charts.js",
+    "./src/report/markdown.js",
+    "./src/utils/core.js",
     "./manifest.json",
     "./Images/logo.png",
     "./Images/favicon-32x32.png",
@@ -43,7 +49,7 @@ self.addEventListener("fetch", (event) => {
 
     const url = new URL(request.url);
 
-    if (url.origin === "https://api.github.com") {
+    if (url.pathname.startsWith("/api/") || url.origin === "https://api.github.com") {
         event.respondWith(fetch(request));
         return;
     }
